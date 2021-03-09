@@ -6,9 +6,13 @@ import time
 import json
 from paho.mqtt import client as mqtt_client
 
-broker = 'broker.hivemq.com'
+broker = 'thingsboard.cloud'
+topicTelemetry = 'v1/devices/me/telemetry'
+topicRequest = 'v1/devices/me/rpc/request/'
+topicResponse = 'v1/devices/me/rpc/response/'
 port = 1883
 topic1 = "vmk/team_4"
+ACCESS_TOKEN = 'Hj0payDBaIzqWowpoj0U'
 topic2 = "vmk/team_4/commands"
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-0'
@@ -24,9 +28,9 @@ def connect_mqtt(id):
             print("Failed to connect, return code %d\n", rc)
 
     client = mqtt_client.Client(id)
-    # client.username_pw_set(username, password)
+    client.username_pw_set(ACCESS_TOKEN)
     client.on_connect = on_connect
-    client.connect(broker, port)
+    client.connect(broker, port, 60)
     return client
 
 
@@ -37,7 +41,7 @@ def publish(client):
     while True:
         time.sleep(5)
         for sensor in sensors_per:
-            result = client.publish(topic1, json.dumps(sensor))
+            result = client.publish(topicTelemetry, json.dumps(sensor))
             status = result[0]
 
 

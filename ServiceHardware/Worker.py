@@ -56,7 +56,7 @@ topic2 = "vmk/team_4/commands"
 # generate client ID with pub prefix randomly
 client_id = 'python-mqtt-0'
 worker_id = 'python-mqtt-1'
-
+topicTelemetry - "v1/devices/me/telemetry"
 
 def get_light():
     value=readLight()
@@ -101,7 +101,7 @@ a = False
 def u(client):
    while True:
         if button.is_pressed:
-            client.publish(topic1, json.dumps(get_light()))
+            client.publish(topicTelemetry, json.dumps(get_light()))
             time.sleep(1)
 
 

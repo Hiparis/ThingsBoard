@@ -4,9 +4,12 @@ import time
 from paho.mqtt import client as mqtt_client
 import json
 
-broker = 'broker.hivemq.com'
+broker = 'thingsboard.cloud'
 port = 1883
 topic = "vmk/team_4"
+topicTelemetry = 'v1/devices/me/telemetry'
+ACCESS_TOKEN = 'Hj0payDBaIzqWowpoj0U'
+topicRequest = 'v1/devices/me/rpc/request/'
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 1000)}'
 # username = 'emqx'
@@ -20,7 +23,7 @@ def connect_mqtt():
             print("Failed to connect, return code %d\n", rc)
 
     client = mqtt_client.Client(client_id)
-    # client.username_pw_set(username, password)
+    client.username_pw_set(ACCESS_TOKEN)
     client.on_connect = on_connect
     client.connect(broker, port)
     return client
@@ -31,7 +34,7 @@ def publish(client):
     while True:
         time.sleep(1)
         msg = f"messages: {msg_count}"
-        result = client.publish(topic, msg)
+        result = client.publish(topicRequest, msg)
         # result: [0, 1]
         status = result[0]
         if status == 0:

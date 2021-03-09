@@ -3,9 +3,11 @@ import random
 from paho.mqtt import client as mqtt_client
 
 
-broker = 'broker.emqx.io'
+broker = 'thingsboard.cloud'
+ACCESS_TOKEN = 'Hj0payDBaIzqWowpoj0U'
 port = 1883
 topic = "/python/mqtt"
+topicRequest = 'v1/devices/me/rpc/request/'
 # generate client ID with pub prefix randomly
 client_id = f'python-mqtt-{random.randint(0, 100)}'
 # username = 'emqx'
@@ -20,7 +22,7 @@ def connect_mqtt() -> mqtt_client:
             print("Failed to connect, return code %d\n", rc)
 
     client = mqtt_client.Client(client_id)
-    # client.username_pw_set(username, password)
+    client.username_pw_set(ACCESS_TOKEN)
     client.on_connect = on_connect
     client.connect(broker, port)
     return client
@@ -30,7 +32,7 @@ def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
         print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
 
-    client.subscribe(topic)
+    client.subscribe(topicRequest)
     client.on_message = on_message
 
 
